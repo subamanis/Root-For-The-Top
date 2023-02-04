@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
+    public event Action onTimeEnd = delegate {};
+    private static float gameTime = 20f;
     // Start is called before the first frame update
     void Start()
     {
@@ -14,5 +16,10 @@ public class GameManager : MonoBehaviour
     void Update()
     {
         
+    }
+    
+
+    public static void addTime(float time) {
+        gameTime += time;
     }
 }
