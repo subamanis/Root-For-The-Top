@@ -11,9 +11,14 @@ public class PetrosPlayerController : MonoBehaviour
     public event Action onMissedTouch = delegate{};
     public TextMeshProUGUI livesText;
 
-    float speed = 1.5f;
+    private int MOMENTUM_LOSS_MULTIPLIER = 6;
+    private float MAX_MOMENTUM = 1f;
+
+    private float speed = 1.5f;
+    private float momentumGathered = 0f;
+    private float momentumDelta = 0.25f;
     private int lives = 2;
-    PetrosObstacle pendingGoodObstacle;
+    private PetrosObstacle pendingGoodObstacle;
 
     private void Start() {
         livesText.text = "Lives: " + lives;
@@ -24,7 +29,7 @@ public class PetrosPlayerController : MonoBehaviour
         if (Input.GetMouseButtonDown(0)) {
             HandleTouch();
         }
-        transform.Translate(0, speed * Time.deltaTime, 0);
+        transform.Translate(0, (speed + momentumGathered) * Time.deltaTime, 0);
     }
 
     private void OnTriggerEnter2D(Collider2D other)
@@ -41,7 +46,11 @@ public class PetrosPlayerController : MonoBehaviour
                 onMissedTouch.Invoke();
                 DamagePlayer();
                 //TODO: Do something to the player (same gameObject)
+            } else {
+                AddMomentum();
             }
+        } else if (other.gameObject.tag == "badObstacle") {
+            AddMomentum();
         }
     }
 
@@ -62,10 +71,20 @@ public class PetrosPlayerController : MonoBehaviour
         Debug.Log("player damaged");
         lives -= 1;
         livesText.text = "Lives: "+lives;
+        LoseMomentum();
         if (lives == 0) {
             onPlayerDeath.Invoke();
             print("PLAYER DEEEAAAAD");
             speed = 0;
         }
+    }
+
+    private void AddMomentum() 
+    {
+        momentumGathered = Mathf.Clamp(momentumGathered + momentumDelta, 0, MAX_MOMENTUM);
+    }
+
+    private void LoseMomentum() {
+        momentumGathered = Mathf.Clamp(momentumGathered - (momentumDelta * MOMENTUM_LOSS_MULTIPLIER), 0, MAX_MOMENTUM);
     }
 }
