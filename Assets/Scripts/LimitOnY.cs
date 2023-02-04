@@ -33,22 +33,22 @@ public class LimitOnY : MonoBehaviour
         {
             if (toMatchObject.y <= yLimit)
             {
-                transform.position = new Vector3(fromPosition.x, yLimit, fromPosition.z);
+                transform.position = new Vector3(matchObject.position.x, yLimit, fromPosition.z);
             }
             else
             {
-                transform.position = new Vector3(startingDifference.x, matchObject.position.y, startingDifference.z);
+                transform.position = new Vector3(matchObject.position.x, matchObject.position.y, startingDifference.z);
             }
         }
         else if (limitDirection == LimitDirection.Up)
         {
             if (toMatchObject.y >= yLimit)
             {
-                transform.position = new Vector3(fromPosition.x, yLimit, fromPosition.z);
+                transform.position = new Vector3(matchObject.position.x, yLimit, fromPosition.z);
             }
             else
             {
-                transform.position = new Vector3(startingDifference.x, matchObject.position.y, startingDifference.z);
+                transform.position = new Vector3(matchObject.position.x, matchObject.position.y, startingDifference.z);
             }
         }
     }
