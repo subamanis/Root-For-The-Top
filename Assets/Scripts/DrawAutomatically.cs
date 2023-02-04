@@ -10,9 +10,11 @@ namespace Thanasis
     {
         public float minimumDistance = 1.0f;
         public float splineHeight = 1.3f;
-        public float playerNextAngle = 180;
         public float spawnEveryMillis = .5f;
-        public float spawnDistance =1;
+        public float spawnDistance = 1;
+        public float playerNextAngle = 180;
+        public float limitPlayerAngleLeft = 240;
+        public float limitPlayerAngleRight = 120;
 
         private float timeSinceLastSpawn = 0f;
 
@@ -40,8 +42,11 @@ namespace Thanasis
             var lastPointPosition =
                 spriteShapeController.spline.GetPosition(spriteShapeController.spline.GetPointCount() - 1);
 
-            Gizmos.color = Color.yellow;
-            Debug.DrawRay(lastPointPosition, Vector3.down * 3);
+            Gizmos.color = Color.red;
+            Gizmos.DrawRay(lastPointPosition, Quaternion.Euler(0, 0, playerNextAngle) * Vector3.down * spawnDistance);
+
+            // Gizmos.color = Color.blue;
+            // Gizmos.DrawRay(lastPointPosition,  Vector3.down * spawnDistance);
         }
 
         private void Smoothen(SpriteShapeController sc, int pointIndex)
@@ -73,13 +78,20 @@ namespace Thanasis
             {
                 var spline = spriteShapeController.spline;
                 var lastPointPosition = spline.GetPosition(spline.GetPointCount() - 1);
-                spline.InsertPointAt(spline.GetPointCount(), lastPointPosition + (Vector3.down * spawnDistance));
+                spline.InsertPointAt(spline.GetPointCount(),
+                    lastPointPosition + (Quaternion.Euler(0, 0, playerNextAngle) * Vector3.down * spawnDistance));
                 var newPointIndex = spline.GetPointCount() - 1;
                 Smoothen(spriteShapeController, newPointIndex - 1);
 
                 spline.SetHeight(newPointIndex, splineHeight);
                 timeSinceLastSpawn = 0;
             }
+        }
+
+        public void HandleUserInput(float transformModifier)
+        {
+            playerNextAngle += transformModifier;
+            playerNextAngle = Mathf.Clamp(playerNextAngle, limitPlayerAngleLeft, limitPlayerAngleRight);
         }
     }
 }
