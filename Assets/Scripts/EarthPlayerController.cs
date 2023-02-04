@@ -4,12 +4,11 @@ using TMPro;
 using UnityEngine;
 using System;
 
-public class PetrosPlayerController : MonoBehaviour
+public class EarthPlayerController : MonoBehaviour
 {
     public event Action onPlayerDeath = delegate{};
     public event Action onSuccessfulTouch = delegate{};
     public event Action onMissedTouch = delegate{};
-    public TextMeshProUGUI livesText;
 
     private int MOMENTUM_LOSS_MULTIPLIER = 6;
     private float MAX_MOMENTUM = 1f;
@@ -17,12 +16,7 @@ public class PetrosPlayerController : MonoBehaviour
     private float speed = 1.5f;
     private float momentumGathered = 0f;
     private float momentumDelta = 0.25f;
-    private int lives = 2;
     private PetrosObstacle pendingGoodObstacle;
-
-    private void Start() {
-        livesText.text = "Lives: " + lives;
-    }
 
     void Update()
     {
@@ -69,14 +63,13 @@ public class PetrosPlayerController : MonoBehaviour
     private void DamagePlayer() 
     {
         Debug.Log("player damaged");
-        lives -= 1;
-        livesText.text = "Lives: "+lives;
+        // livesText.text = "Lives: "+lives;
         LoseMomentum();
-        if (lives == 0) {
-            onPlayerDeath.Invoke();
-            print("PLAYER DEEEAAAAD");
-            speed = 0;
-        }
+        // if (lives == 0) {
+            // onPlayerDeath.Invoke();
+            // print("PLAYER DEEEAAAAD");
+            // speed = 0;
+        // }
     }
 
     private void AddMomentum() 

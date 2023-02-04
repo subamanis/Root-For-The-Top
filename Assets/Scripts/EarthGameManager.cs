@@ -2,14 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PetrosGameManager : MonoBehaviour
+public class EarthGameManager : MonoBehaviour
 {
-    private PetrosPlayerController playerController;
+    private EarthPlayerController playerController;
     //private GeorgeTimer timer;
 
     void Awake()
     {
-        playerController = FindObjectOfType<PetrosPlayerController>();
+        playerController = FindObjectOfType<EarthPlayerController>();
         // timer = FindObjectOfType<GeorgeTimer>();
     }
 

@@ -1,5 +1,6 @@
 ﻿using System;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.U2D;
 
 // Dynamic modification of spline to follow the path of mouse movement.
@@ -9,8 +10,9 @@ namespace Thanasis
     public class DrawAutomatically : MonoBehaviour
     {
         public float minimumDistance = 1.0f;
-        public float splineHeight = 1.3f;
-        public float spawnEveryMillis = .5f;
+        public float splineHeightMultiplier = 1.3f;
+        public float splineHeightMin = 0.3f;
+        public float spawnEverySeconds = .5f;
         public float spawnDistance = 1;
         public float playerNextAngle = 180;
         public float limitPlayerAngleLeft = 240;
@@ -20,6 +22,16 @@ namespace Thanasis
 
         private Vector3 lastPosition;
         public SpriteShapeController spriteShapeController;
+        public Timer timer;
+        private Vector3 lastPointPosition;
+
+        private void Start()
+        {
+            timer.onTimeEnd += () =>
+            {
+                this.enabled = false;
+            };
+        }
 
         private static int NextIndex(int index, int pointCount)
         {
@@ -73,19 +85,35 @@ namespace Thanasis
         void Update()
         {
             timeSinceLastSpawn += Time.deltaTime;
+            var spline = spriteShapeController.spline;
 
-            if (timeSinceLastSpawn > spawnEveryMillis)
+            var nextPosition = lastPointPosition +
+                               (Quaternion.Euler(0, 0, playerNextAngle) * Vector3.down * spawnDistance);
+
+            if (timeSinceLastSpawn > spawnEverySeconds)
             {
-                var spline = spriteShapeController.spline;
-                var lastPointPosition = spline.GetPosition(spline.GetPointCount() - 1);
-                spline.InsertPointAt(spline.GetPointCount(),
-                    lastPointPosition + (Quaternion.Euler(0, 0, playerNextAngle) * Vector3.down * spawnDistance));
-                var newPointIndex = spline.GetPointCount() - 1;
+                var newPointIndex = spline.GetPointCount();
+                spline.InsertPointAt(spline.GetPointCount(), nextPosition);
                 Smoothen(spriteShapeController, newPointIndex - 1);
 
-                spline.SetHeight(newPointIndex, splineHeight);
+
                 timeSinceLastSpawn = 0;
+                lastPointPosition = nextPosition;
             }
+            else
+            {
+                spline.SetPosition(spline.GetPointCount() - 1,
+                    Vector3.Lerp(lastPointPosition, nextPosition,
+                        timeSinceLastSpawn / spawnEverySeconds));
+
+                if (spline.GetPointCount() > 2)
+                {
+                    Smoothen(spriteShapeController, spline.GetPointCount() - 2);
+                }
+            }
+
+            spline.SetHeight(spline.GetPointCount() - 1,
+                timer.GetTimeLeft01() * splineHeightMultiplier + splineHeightMin);
         }
 
         public void HandleUserInput(float transformModifier)
