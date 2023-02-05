@@ -11,15 +11,18 @@ public class EarthPlayerController : MonoBehaviour
     public event Action onSuccessfulTouch = delegate { };
     public event Action onMissedTouch = delegate { };
 
-    // private int MOMENTUM_LOSS_MULTIPLIER = 6;
-    // private float MAX_MOMENTUM = 1f;
-
-    // private float speed = 1.5f;
     public float momentumGatheredPercent = .25f;
     public float momentumLostPercent = 0.4f;
-    private PetrosObstacle pendingGoodObstacle;
+    private GameObject pendingGoodObstacle;
 
     public DrawAutomatically drawAutomatically;
+
+    private SoundManager soundManager;
+
+    private void Awake()
+    {
+        soundManager = FindObjectOfType<SoundManager>();
+    }
 
     void Update()
     {
@@ -27,14 +30,30 @@ public class EarthPlayerController : MonoBehaviour
         {
             HandleTouch();
         }
-        // transform.Translate(0, (speed + momentumGathered) * Time.deltaTime, 0);
+    }
+
+    private void HandleTouch()
+    {
+        if (pendingGoodObstacle)
+        {
+            onSuccessfulTouch.Invoke();
+            pendingGoodObstacle = null;
+            soundManager.playSuccess();
+            Destroy(pendingGoodObstacle);
+            AddMomentum();
+        }
+        else
+        {
+            onMissedTouch.Invoke();
+            DamagePlayer();
+        }
     }
 
     private void OnTriggerEnter2D(Collider2D other)
     {
         if (other.gameObject.CompareTag("goodObstacle"))
         {
-            pendingGoodObstacle = other.gameObject.GetComponent<PetrosObstacle>();
+            pendingGoodObstacle = other.gameObject;
         }
     }
 
@@ -46,55 +65,30 @@ public class EarthPlayerController : MonoBehaviour
             {
                 onMissedTouch.Invoke();
                 DamagePlayer();
-                //TODO: Do something to the player (same gameObject)
-            }
-            else
-            {
-                AddMomentum();
+                soundManager.playDamage();
+                Destroy(other.gameObject);
             }
         }
         else if (other.gameObject.CompareTag("badObstacle"))
         {
             AddMomentum();
-        }
-    }
-
-    private void HandleTouch()
-    {
-        if (pendingGoodObstacle)
-        {
-            onSuccessfulTouch.Invoke();
-            pendingGoodObstacle = null;
-        }
-        else
-        {
-            onMissedTouch.Invoke();
-            DamagePlayer();
-            //TODO: Do something to the player (same gameObject)
+            soundManager.playSuccess();
+            Destroy(other.gameObject);
         }
     }
 
     private void DamagePlayer()
     {
-        Debug.Log("player damaged");
-        // livesText.text = "Lives: "+lives;
         LoseMomentum();
-        // if (lives == 0) {
-        // onPlayerDeath.Invoke();
-        // print("PLAYER DEEEAAAAD");
-        // speed = 0;
-        // }
     }
 
     private void AddMomentum()
     {
         drawAutomatically.spawnDistance *= momentumGatheredPercent;
-        // momentumGathered = Mathf.Clamp(momentumGathered + momentumDelta, 0, MAX_MOMENTUM);
     }
 
     private void LoseMomentum()
     {
         drawAutomatically.spawnDistance *= (1f - momentumLostPercent);
-        // momentumGathered = Mathf.Clamp(momentumGathered - (momentumDelta * MOMENTUM_LOSS_MULTIPLIER), 0, MAX_MOMENTUM);
     }
 }
