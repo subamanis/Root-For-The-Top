@@ -22,7 +22,7 @@ public class Timer : MonoBehaviour
         myText.text = String.Format("{0:00.0}", timeLeft.TotalSeconds);
     }
 
-    public void AddSecondsToTimer(int seconds)
+    public void AddSecondsToTimer(float seconds)
     {
         timeLeft = timeLeft.Add(TimeSpan.FromSeconds(seconds));
     }

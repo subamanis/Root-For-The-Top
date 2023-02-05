@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class RootCollider : MonoBehaviour
 {
-    private const int DEFAULT_TIME_AMOUNT = 2;
+    private const float DEFAULT_TIME_AMOUNT = .5f;
     
     
     public Timer timer;
