@@ -7,31 +7,35 @@ namespace SpriteShapeExtras
 {
     public class Sprinkler : MonoBehaviour
     {
-    
         public GameObject m_Prefab;
         public float m_RandomFactor = 10.0f;
         public bool m_UseNormals = false;
-    
+
+        public bool sprinkleNow = false;
+
+        public SpriteShapeController spriteShapeController;
+        public Transform leavesHolder;
+
         float Angle(Vector3 a, Vector3 b)
         {
             float dot = Vector3.Dot(a, b);
             float det = (a.x * b.y) - (b.x * a.y);
             return Mathf.Atan2(det, dot) * Mathf.Rad2Deg;
         }
-    
+
         // Use this for initialization. Plant the Prefabs on Startup
-        void Start ()
+        void SprinkleNow()
         {
-            SpriteShapeController ssc = GetComponent<SpriteShapeController>();
-            Spline spl = ssc.spline;
-    
+            Spline spl = spriteShapeController.spline;
+
             for (int i = 1; i < spl.GetPointCount() - 1; ++i)
             {
-                if (Random.Range(0, 100) > (100 - m_RandomFactor) )
+                var leftOrRightSide = Random.Range(0f, 1f) > .5f;
+                if (Random.Range(0, 100) > (100 - m_RandomFactor))
                 {
-                    var go = GameObject.Instantiate(m_Prefab);
+                    var go = GameObject.Instantiate(m_Prefab, leavesHolder);
                     go.transform.position = spl.GetPosition(i);
-    
+
                     if (m_UseNormals)
                     {
                         Vector3 lt = Vector3.Normalize(spl.GetPosition(i - 1) - spl.GetPosition(i));
@@ -41,16 +45,20 @@ namespace SpriteShapeExtras
                         float c = a + (b * 0.5f);
                         if (b > 0)
                             c = (180 + c);
-                        go.transform.rotation = Quaternion.Euler(0, 0, c);
+                        go.transform.rotation = Quaternion.Euler(0, 0, c * (leftOrRightSide ? 1 : -1));
                     }
                 }
             }
         }
-        
+
         // Update is called once per frame
-        void Update ()
+        void Update()
         {
-    
+            if (sprinkleNow)
+            {
+                SprinkleNow();
+                sprinkleNow = false;
+            }
         }
     }
 }
