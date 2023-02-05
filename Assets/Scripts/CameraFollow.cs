@@ -8,12 +8,14 @@ namespace Thanasis
     {
         public event Action OnReadyToFollow = delegate { };
 
-        public float speed;
+        public float speed = 3;
+        public float chaseSpeed = 25;
         public Transform targetObject;
         private Vector3 _initialOffset;
         private Vector3 _cameraPosition;
 
         private bool _isFollowing = false;
+        public bool isChasing = false;
 
         public float equalDistance = 0.1f;
 
@@ -29,7 +31,8 @@ namespace Thanasis
             {
                 _cameraPosition = targetObject.position + _initialOffset;
                 transform.position =
-                    Vector3.MoveTowards(transform.position, _cameraPosition, speed * Time.deltaTime);
+                    Vector3.MoveTowards(transform.position, _cameraPosition,
+                        (isChasing ? chaseSpeed : speed) * Time.deltaTime);
                 // transform.position = Vector3.Lerp(transform.position, _cameraPosition, smoothness * Time.fixedDeltaTime);
 
                 if (Vector3.Distance(_cameraPosition, transform.position) <= equalDistance)

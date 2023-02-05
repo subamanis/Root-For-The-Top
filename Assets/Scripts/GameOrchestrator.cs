@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Thanasis;
+using TMPro;
 using UnityEngine;
 using UnityEngine.Serialization;
 
@@ -82,14 +83,21 @@ public class GameOrchestrator : MonoBehaviour
         if (active)
         {
             cameraFollow.targetObject = (player == Player.Ground ? groundLastPointFollower : earthLastPointFollower);
+            cameraFollow.isChasing = true;
             cameraFollow.OnReadyToFollow += () =>
             {
+                cameraFollow.isChasing = false;
                 if (player == Player.Ground)
                     groundPlayer.SetActive(true);
                 else if (player == Player.Earth)
                     earthPlayer.SetActive(true);
                 timer.ResetTimer(player == Player.Ground ? groundSeconds : earthSeconds);
             };
+            if (player == Player.Earth)
+            {
+                // timer.GetComponentInChildren<TextMeshProUGUI>(true).SetText($"{earthSeconds:00.0}");
+            }
+
             cameraFollow.StartFollow();
         }
     }
