@@ -1298,7 +1298,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2fd42095259a8f6438f922afe5b8e471, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  minimumDistance: 1
+  autoWiggleMove: 1
+  wiggleSpeed: 140
   splineHeightMultiplier: 2
   splineHeightMin: 0.1
   spawnEverySeconds: 0.5
@@ -1355,7 +1356,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2fd42095259a8f6438f922afe5b8e471, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  minimumDistance: 1
+  autoWiggleMove: 0
+  wiggleSpeed: 140
   splineHeightMultiplier: 2
   splineHeightMin: 0.1
   spawnEverySeconds: 0.5

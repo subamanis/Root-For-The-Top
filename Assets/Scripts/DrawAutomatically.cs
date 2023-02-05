@@ -9,7 +9,9 @@ namespace Thanasis
 {
     public class DrawAutomatically : MonoBehaviour
     {
-        public float minimumDistance = 1.0f;
+        public bool autoWiggleMove = false;
+        public float wiggleSpeed = 140f;
+
         public float splineHeightMultiplier = 1.3f;
         public float splineHeightMin = 0.3f;
         public float spawnEverySeconds = .5f;
@@ -27,10 +29,7 @@ namespace Thanasis
 
         private void Start()
         {
-            timer.onTimeEnd += () =>
-            {
-                this.enabled = false;
-            };
+            timer.onTimeEnd += () => { this.enabled = false; };
         }
 
         private static int NextIndex(int index, int pointCount)
@@ -114,12 +113,22 @@ namespace Thanasis
 
             spline.SetHeight(spline.GetPointCount() - 1,
                 timer.GetTimeLeft01() * splineHeightMultiplier + splineHeightMin);
+
+            if (autoWiggleMove)
+            {
+                playerNextAngle = Mathf.PingPong(Time.time * wiggleSpeed + limitPlayerAngleLeft,
+                                      limitPlayerAngleLeft - limitPlayerAngleRight) +
+                                  limitPlayerAngleRight;
+            }
         }
 
         public void HandleUserInput(float transformModifier)
         {
-            playerNextAngle += transformModifier;
-            playerNextAngle = Mathf.Clamp(playerNextAngle, limitPlayerAngleLeft, limitPlayerAngleRight);
+            if (!autoWiggleMove)
+            {
+                playerNextAngle += transformModifier;
+                playerNextAngle = Mathf.Clamp(playerNextAngle, limitPlayerAngleLeft, limitPlayerAngleRight);
+            }
         }
     }
 }
