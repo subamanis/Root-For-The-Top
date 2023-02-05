@@ -76,7 +76,7 @@ public class EarthPlayerController : MonoBehaviour
         else if (other.gameObject.CompareTag("badObstacle"))
         {
             // AddMomentum();
-            soundManager.playSuccess();
+            // soundManager.playSuccess();
             Destroy(other.gameObject);
         }
     }

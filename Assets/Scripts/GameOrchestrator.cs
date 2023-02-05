@@ -8,6 +8,7 @@ using UnityEngine.Serialization;
 
 public class GameOrchestrator : MonoBehaviour
 {
+    public float initialDelay = 2f;
     public Player firstPlayer = Player.Ground;
     public Player secondPlayer = Player.Earth;
     public GameObject groundPlayer;
@@ -41,6 +42,13 @@ public class GameOrchestrator : MonoBehaviour
     {
         Application.targetFrameRate = 60;
         timer.onTimeEnd += OnTimeEnd;
+
+        StartCoroutine(StartGame());
+    }
+
+    IEnumerator StartGame()
+    {
+        yield return new WaitForSeconds(initialDelay);
         if (firstPlayer != Player.None)
         {
             SetPlayerState(firstPlayer, true);
