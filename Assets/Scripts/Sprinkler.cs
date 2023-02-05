@@ -1,7 +1,9 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.U2D;
+using Random = UnityEngine.Random;
 
 namespace SpriteShapeExtras
 {
@@ -10,14 +12,14 @@ namespace SpriteShapeExtras
         public GameObject m_Prefab;
         public float m_RandomFactor = 10.0f;
         public bool m_UseNormals = false;
-        
+
         public float sprinkleEverySeconds = 0.5f;
 
         public bool sprinkleNow = false;
 
         public SpriteShapeController spriteShapeController;
         public Transform leavesHolder;
-        
+
         private float timeSinceLastSpawn = 0f;
 
         float Angle(Vector3 a, Vector3 b)
@@ -32,7 +34,7 @@ namespace SpriteShapeExtras
         {
             Spline spl = spriteShapeController.spline;
 
-            for (int i = 1; i < spl.GetPointCount() - 1; ++i)
+            for (int i = Math.Max(1, spl.GetPointCount() - 6); i < spl.GetPointCount() - 1; ++i)
             {
                 var leftOrRightSide = Random.Range(0f, 1f) > .5f;
                 if (Random.Range(0, 100) > (100 - m_RandomFactor))
@@ -59,7 +61,7 @@ namespace SpriteShapeExtras
         void Update()
         {
             timeSinceLastSpawn += Time.deltaTime;
-            
+
             if (timeSinceLastSpawn > sprinkleEverySeconds)
             {
                 SprinkleNow();

@@ -736,6 +736,7 @@ MonoBehaviour:
   m_Prefab: {fileID: 1791732276458280, guid: 65c7a54f7ec130845a08e9e420955ece, type: 3}
   m_RandomFactor: 90
   m_UseNormals: 1
+  sprinkleEverySeconds: 0.5
   sprinkleNow: 0
   spriteShapeController: {fileID: 1925934655}
   leavesHolder: {fileID: 1976327645}
@@ -1106,6 +1107,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 4
   targetObject: {fileID: 0}
+  equalDistance: 0.1
 --- !u!1 &1335855807
 GameObject:
   m_ObjectHideFlags: 0
@@ -1155,7 +1157,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   autoWiggleMove: 1
   wiggleSpeed: 140
-  splineHeightMultiplier: 2
+  splineHeightMultiplier: 1
   splineHeightMin: 0.1
   spawnEverySeconds: 0.5
   spawnDistance: 2
@@ -1498,11 +1500,10 @@ SpriteShapeRenderer:
   m_MaskInteraction: 0
   m_ShapeTexture: {fileID: 0}
   m_Sprites:
-  - {fileID: 21300000, guid: 67aa93114255a1a4cac689b5e1f9fffe, type: 3}
-  - {fileID: 21300000, guid: e74b518a65bc45f4cace9a2fef6af29d, type: 3}
+  - {fileID: 21300000, guid: 3a6e5f56af44d2c439f06dc5d04817ff, type: 3}
   m_LocalAABB:
-    m_Center: {x: -0.0030581653, y: 0.6176964, z: 0}
-    m_Extent: {x: 0.3810627, y: 0.640446, z: 0}
+    m_Center: {x: -0.0030595064, y: 0.616762, z: 0}
+    m_Extent: {x: 0.53856134, y: 0.6461871, z: 0}
 --- !u!1 &1937446582
 GameObject:
   m_ObjectHideFlags: 0

@@ -38,6 +38,7 @@ public class GameOrchestrator : MonoBehaviour
 
     private void Start()
     {
+        Application.targetFrameRate = 60;
         timer.onTimeEnd += OnTimeEnd;
         if (firstPlayer != Player.None)
         {
