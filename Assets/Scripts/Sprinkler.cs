@@ -10,11 +10,15 @@ namespace SpriteShapeExtras
         public GameObject m_Prefab;
         public float m_RandomFactor = 10.0f;
         public bool m_UseNormals = false;
+        
+        public float sprinkleEverySeconds = 0.5f;
 
         public bool sprinkleNow = false;
 
         public SpriteShapeController spriteShapeController;
         public Transform leavesHolder;
+        
+        private float timeSinceLastSpawn = 0f;
 
         float Angle(Vector3 a, Vector3 b)
         {
@@ -54,10 +58,13 @@ namespace SpriteShapeExtras
         // Update is called once per frame
         void Update()
         {
-            if (sprinkleNow)
+            timeSinceLastSpawn += Time.deltaTime;
+            
+            if (timeSinceLastSpawn > sprinkleEverySeconds)
             {
                 SprinkleNow();
                 sprinkleNow = false;
+                timeSinceLastSpawn = 0f;
             }
         }
     }

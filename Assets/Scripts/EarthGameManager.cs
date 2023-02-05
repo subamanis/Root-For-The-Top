@@ -9,7 +9,7 @@ public class EarthGameManager : MonoBehaviour
 
     void Awake()
     {
-        playerController = FindObjectOfType<EarthPlayerController>();
+        playerController = FindObjectOfType<EarthPlayerController>(true);
         // timer = FindObjectOfType<GeorgeTimer>();
     }
 

@@ -8,13 +8,11 @@ public class Timer : MonoBehaviour
 {
     public event Action onTimeEnd = delegate { };
 
-    public float initialTimer = 10;
-
     public TextMeshProUGUI myText;
     private bool isTimerOn = false;
     private TimeSpan timeLeft;
-    public bool debugReset = false;
 
+    private float timerDuration;
 
     void UpdateTimer()
     {
@@ -29,26 +27,21 @@ public class Timer : MonoBehaviour
 
     public float GetTimeLeft01()
     {
-        var timerLeft01 = (float)timeLeft.TotalMilliseconds / (initialTimer * 1000);
+        var timerLeft01 = (float)timeLeft.TotalMilliseconds / (timerDuration * 1000);
         Debug.Log("Thanasis " + timerLeft01);
         return timerLeft01;
     }
 
-    public void ResetTimer()
+    public void ResetTimer(float seconds)
     {
-        timeLeft = TimeSpan.FromSeconds(initialTimer);
+        timerDuration = seconds;
+        timeLeft = TimeSpan.FromSeconds(seconds);
         isTimerOn = true;
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (debugReset)
-        {
-            debugReset = false;
-            ResetTimer();
-        }
-
         if (isTimerOn)
         {
             if (timeLeft > TimeSpan.Zero)

@@ -1,23 +1,43 @@
+using System;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Thanasis
 {
     public class CameraFollow : MonoBehaviour
     {
-        public float smoothness;
+        public event Action OnReadyToFollow = delegate { };
+
+        public float speed;
         public Transform targetObject;
         private Vector3 _initialOffset;
         private Vector3 _cameraPosition;
 
-        void Start()
+        private bool _isFollowing = false;
+
+        public float equalDistance = 0.1f;
+
+        public void StartFollow()
         {
-            _initialOffset = transform.position - targetObject.position;
+            _initialOffset = new Vector3(0, 0, (transform.position - targetObject.position).z);
+            _isFollowing = true;
         }
 
-        void FixedUpdate()
+        void Update()
         {
-            _cameraPosition = targetObject.position + _initialOffset;
-            transform.position = Vector3.Lerp(transform.position, _cameraPosition, smoothness * Time.fixedDeltaTime);
+            if (_isFollowing)
+            {
+                _cameraPosition = targetObject.position + _initialOffset;
+                transform.position =
+                    Vector3.MoveTowards(transform.position, _cameraPosition, speed * Time.deltaTime);
+                // transform.position = Vector3.Lerp(transform.position, _cameraPosition, smoothness * Time.fixedDeltaTime);
+
+                if (Vector3.Distance(_cameraPosition, transform.position) <= equalDistance)
+                {
+                    OnReadyToFollow.Invoke();
+                    OnReadyToFollow = delegate { };
+                }
+            }
         }
     }
 }
