@@ -19,9 +19,9 @@ public class GameOrchestrator : MonoBehaviour
     public CameraFollow cameraFollow;
     public Timer timer;
 
-    private InternalPlayerState _playerState = InternalPlayerState.NoPlayer;
+    public InternalPlayerState _playerState = InternalPlayerState.NoPlayer;
 
-    private enum InternalPlayerState
+    public enum InternalPlayerState
     {
         NoPlayer,
         FirstIsPlaying,

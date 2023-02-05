@@ -36,7 +36,7 @@ public class SoundManager : MonoBehaviour
     void Start()
     {
         // TODO: if !gameManager.isPlayingGroundLevel
-        crackingEarth?.Play();
+        crackingGround?.Play();
         ambient?.Play();
     }
 
@@ -62,10 +62,11 @@ public class SoundManager : MonoBehaviour
     public void ToggleCracking() 
     {
         // TODO: if gameManager.isPlayingGroundLevel
-        if (crackingEarth.isPlaying) {
-            crackingEarth.Stop();
-        } else {
-            crackingEarth.Play();
-        }
+        crackingGround.Stop();
+        crackingEarth.Play();
+        // if (crackingEarth.isPlaying) {
+        // } else {
+        //     crackingEarth.Play();
+        // }
     }
 }

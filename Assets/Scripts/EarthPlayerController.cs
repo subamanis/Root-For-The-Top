@@ -16,6 +16,7 @@ public class EarthPlayerController : MonoBehaviour
     private GameObject pendingGoodObstacle;
 
     public DrawAutomatically drawAutomatically;
+    public GameObject middleHand;
 
     private SoundManager soundManager;
 
@@ -26,9 +27,12 @@ public class EarthPlayerController : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetMouseButtonDown(0))
+        if (Input.GetMouseButton(0))
         {
             HandleTouch();
+            middleHand.SetActive(true);
+        } else {
+            middleHand.SetActive(false);
         }
     }
 
@@ -40,12 +44,12 @@ public class EarthPlayerController : MonoBehaviour
             pendingGoodObstacle = null;
             soundManager.playSuccess();
             Destroy(pendingGoodObstacle);
-            AddMomentum();
+            // AddMomentum();
         }
         else
         {
             onMissedTouch.Invoke();
-            DamagePlayer();
+            // DamagePlayer();
         }
     }
 
@@ -64,14 +68,14 @@ public class EarthPlayerController : MonoBehaviour
             if (pendingGoodObstacle)
             {
                 onMissedTouch.Invoke();
-                DamagePlayer();
+                // DamagePlayer();
                 soundManager.playDamage();
                 Destroy(other.gameObject);
             }
         }
         else if (other.gameObject.CompareTag("badObstacle"))
         {
-            AddMomentum();
+            // AddMomentum();
             soundManager.playSuccess();
             Destroy(other.gameObject);
         }
